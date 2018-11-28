@@ -1,3 +1,6 @@
+
+PROBLEM STATEMENT:
+
     A retail company “ABC Private Limited” wants to understand the customer purchase 
     behaviour (specifically, purchase amount) against various products of different
     categories. They have shared purchase summary of various customers for selected 
@@ -10,3 +13,11 @@
     for customers against different products.
 	
 Source of the project problem: https://datahack.analyticsvidhya.com/contest/black-friday/
+
+USED AVERAGE OF 3 XGBOOST MODELS FOR PREDICTION.
+
+	model 1 (depth:8 trees:1450 iterations:20)
+
+	model 2 (depth:12 trees:800 iterations:20)
+
+	model 3 (depth:6 trees:3000 iterations:35)
