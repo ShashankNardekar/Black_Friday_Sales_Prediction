@@ -16,35 +16,25 @@ Created on Sun Nov 18 18:54:25 2018
     Now, they want to build a model to predict the purchase amount of customer 
     against various products which will help them to create personalized offer 
     for customers against different products.
-    https://datahack.analyticsvidhya.com/contest/black-friday/?utm_source=auto-email
-    http://rohanrao91.blogspot.com/2015/11/black-friday-data-hack.html'''
+    https://datahack.analyticsvidhya.com/contest/black-friday'''
 
 import pandas as pd
 import numpy as np
-#from sklearn.tree import DecisionTreeClassifier
-#import matplotlib.pyplot as plt
-
-from sklearn.svm import SVR
 from sklearn.metrics import mean_squared_error
 from math import sqrt
-#from sklearn.decomposition import PCA
 from xgboost import XGBClassifier
-#from sklearn.preprocessing import MinMaxScaler
 import xgboost as xgb
 import matplotlib.pyplot as plt
 
 path = r'C:\Users\nardekars.BSG\Documents\icarus-master\br personal\study\analytics_vidhya_projects\\'
+
 trainData = pd.read_csv(path+r'\train.csv')
-
-trainData = trainData.sample(frac=0.1).reset_index(drop=True)
-
 
 trainData.head(10)
 
 trainData.describe()
 
 trainData.info()
-trainData.to_csv(path+r'\train_sampled_10_percent.csv',index=False)
 
 
 #trainData = trainData.fillna(0.0)
@@ -89,28 +79,15 @@ def getDummies(columnName,trainData):
 #city_category to one-hot
 trainData = getDummies('City_Category',trainData)
 
-#using userCount as a feature
-userCountDF = trainData['User_ID'].value_counts().reset_index().rename(columns={'User_ID':'User_Count','index':'User_ID'})
-trainData = pd.merge(trainData,userCountDF,on='User_ID',how='left')
-
-userAvgPurchase = trainData.groupby('User_ID').agg({'Purchase':np.mean}).reset_index().rename(columns={'Purchase':'User_Count'})
+#using Product average purchase per user as a feature
+userAvgPurchase = trainData.groupby('User_ID').agg({'Purchase':np.mean}).reset_index().rename(columns={'Purchase':'User_Avg_Purchase'})
 trainData = pd.merge(trainData,userAvgPurchase,on='User_ID',how='left')
 
-#using Product average purchase as a feature
+#using average purchase per product as a feature
 productAvgPurchase = trainData.groupby('Product_ID').agg({'Purchase':np.mean}).reset_index().rename(columns={'Purchase':'Product_Avg_Purchase'})
 trainData = pd.merge(trainData,productAvgPurchase,on='Product_ID',how='left')
 
 trainData.columns
-
-
-
-heatmap, xedges, yedges = np.histogram2d(trainData['Gender'], trainData['Purchase'], bins=50)
-extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
-
-plt.clf()
-plt.imshow(heatmap.T, extent=extent, origin='lower')
-plt.show()
-
 
 
 ''' RANDOM SAMPLING FOR TRAIN AND TEST '''
@@ -119,7 +96,7 @@ trainData = trainData.sample(frac=1).reset_index(drop=True)
 colsForPrediction = [ u'Gender', u'Age', u'Occupation', u'Stay_In_Current_City_Years',
                      u'Marital_Status',u'Product_Category_1', u'Product_Category_2',
                      u'Product_Category_3',u'City_Category_A', u'City_Category_B',
-                     u'City_Category_C','User_Count','Product_Avg_Purchase']
+                     u'City_Category_C','User_Avg_Purchase','Product_Avg_Purchase']
 
 trainDataTrain = trainData[0:440054]
 trainDataValidate = trainData[440055:550068]
@@ -165,7 +142,6 @@ y_pred2 = model2.predict(dtest)
 y_pred3 = model3.predict(dtest)
 
 
-
 trainDataValidate['Purchase_Predicted_1'] = y_pred1
 trainDataValidate['Purchase_Predicted_2'] = y_pred2
 trainDataValidate['Purchase_Predicted_3'] = y_pred3
@@ -173,9 +149,6 @@ trainDataValidate['Purchase_Predicted_3'] = y_pred3
 trainDataValidate['Purchase_Predicted_XGB_avg'] = (trainDataValidate['Purchase_Predicted_1'] + trainDataValidate['Purchase_Predicted_2'] + trainDataValidate['Purchase_Predicted_3']) / 3
 
 sqrt(mean_squared_error(trainDataValidate['Purchase'],trainDataValidate['Purchase_Predicted_XGB_avg']))
-#3000.9661652348796
-#2990.8496895394605
-#2986.1973073292183
 
 #model1 : 2966.21 || 2922.16 || 2917.36 (8,1450) office || 2546.12 office || 2486.04 office || 2486.04 office 
 #model2 : 2970.96 || 2948.76 || 2953.09 (12,800) office || 2551.82 office || 2500.00 office || 2500.00 office
