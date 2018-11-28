@@ -21,3 +21,5 @@ USED AVERAGE OF 3 XGBOOST MODELS FOR PREDICTION.
 	model 2 (depth:12 trees:800 iterations:20)
 
 	model 3 (depth:6 trees:3000 iterations:35)
+
+VALIDATION RMSE ON TRAIN DATA 2463.16 (TRAIN:VALIDATE = 80:20)
