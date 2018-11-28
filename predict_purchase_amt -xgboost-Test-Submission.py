@@ -113,6 +113,6 @@ testData['Purchase_Predicted_XGB_avg'].plot(kind='hist')
 
 testData = testData[['User_ID','Product_ID','Purchase_Predicted_XGB_avg']]
 
-testData.to_csv(path+r'\validationOutputXGB_AVG.csv',index=False)
+testData.to_csv(path+r'\testOutputXGB_AVG.csv',index=False)
 
 
