@@ -1,5 +1,5 @@
 
-PROBLEM STATEMENT:
+#PROBLEM STATEMENT:
 
     A retail company “ABC Private Limited” wants to understand the customer purchase 
     behaviour (specifically, purchase amount) against various products of different
@@ -14,7 +14,7 @@ PROBLEM STATEMENT:
 	
 Source of the project problem: https://datahack.analyticsvidhya.com/contest/black-friday/
 
-USED AVERAGE OF 3 XGBOOST MODELS FOR PREDICTION.
+#USED AVERAGE OF 3 XGBOOST MODELS FOR PREDICTION.
 
 	model 1 (depth:8 trees:1450 iterations:20)
 
