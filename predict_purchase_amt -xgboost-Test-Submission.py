@@ -107,12 +107,11 @@ y_pred2 = model2.predict(dtest)
 y_pred3 = model3.predict(dtest)
 
 
-testData['Purchase_Predicted_XGB_avg'] = (y_pred1 + y_pred2 + y_pred3) / 3
+testData['Purchase'] = (y_pred1 + y_pred2 + y_pred3) / 3
 
-testData['Purchase_Predicted_XGB_avg'].plot(kind='hist')
+testData['Purchase'].plot(kind='hist')
 
-testData = testData[['User_ID','Product_ID','Purchase_Predicted_XGB_avg']]
-
+testData = testData[['User_ID','Product_ID','Purchase']]
 testData.to_csv(path+r'\testOutputXGB_AVG.csv',index=False)
 
 
